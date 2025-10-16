@@ -7,7 +7,8 @@
 </head>
 <body>
     <?php
-    $pdo = new PDO('pgsql:host=localhost;dbname=steam', 'steam', '1234');
+    require 'auxiliar.php';
+    $pdo = conectar();
     $pdo->exec("SET NAMES 'UTF8'");
     $sent = $pdo->query('SELECT * FROM clientes');
     ?>
@@ -20,6 +21,7 @@
             <th>Dirección</th>
             <th>Código Postal</th>
             <th>Teléfono</th>
+            <th>Acciones</th>
         </thead>
         <tbody>
             <?php foreach ($sent as $fila): ?>
@@ -30,6 +32,12 @@
                 <td><?= $fila['direccion'] ?></td>
                 <td><?= $fila['codpostal'] ?></td>
                 <td><?= $fila['telefono'] ?></td>
+                <td>
+                    <form action="borrar.php" method="post" >
+                        <input type="hidden" name="id" value="<?=$fila['id']?>">
+                        <button type="submit"> "borrar" </button>
+            </form>
+                </td>
             </tr>
             <?php endforeach ?>
         </tbody>
@@ -42,7 +50,6 @@
             <th>titulos</th>
             <th>genero</th>
             <th>precio</th>
-            <th>stock</th>
         </thead>
         <tbody>
             <?php foreach ($sent as $fila): ?>
@@ -50,7 +57,6 @@
                 <td><?= $fila['titulo'] ?></td>
                 <td><?= $fila['genero'] ?></td>
                 <td><?= $fila['precio'] ?></td>
-                <td><?= $fila['stock'] ?></td>
             </tr>
             <?php endforeach ?>
         </tbody>

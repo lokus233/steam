@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS juegos CASCADE;
 DROP TABLE IF EXISTS desarrolladoras CASCADE;
 --Tabla de clientes de la tienda online
 CREATE TABLE clientes (
-    id_cliente          BIGSERIAL       PRIMARY KEY,
+    id         BIGSERIAL       PRIMARY KEY,
     dni         VARCHAR(9)      NOT NULL UNIQUE,
     nombre      VARCHAR(255)    NOT NULL,
     apellidos   VARCHAR(255),
@@ -16,18 +16,18 @@ CREATE TABLE clientes (
 );
 --Tabla de desarrolladores
 CREATE TABLE desarrolladoras(
-    id_desar BIGSERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL
 );
 
 --Tabla de juegos de la tienda online
 CREATE TABLE juegos (
-    id_juego          BIGSERIAL       PRIMARY KEY,
+    id         BIGSERIAL       PRIMARY KEY,
     titulo      VARCHAR(255)     NOT NULL,
     genero      VARCHAR(255)    NOT NULL,
     fecha_salida    TIMESTAMP(0)   NOT NULL,
     precio      NUMERIC(6,2),
-    desarrolladora_id   BIGINT  NOT NULL REFERENCES desarrolladoras(id_desar)
+    desarrolladora_id   BIGINT  NOT NULL REFERENCES desarrolladoras(id)
 );
 
 --DATOS DE PRUEBA
