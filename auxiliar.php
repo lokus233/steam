@@ -19,7 +19,12 @@ function validar_dni($dni, &$error){
         }elseif(mb_strlen($dni) > 9){
                 $error[] = 'El DNI es demasiado largo';
         }else{
-                //Comprobar qeu es único
+                $pdo = conectar();
+                $sent = $pdo->prepare('SELECT * FROM clientes WHERE dni = :dni');
+                $sent->execute([':dni' => $dni]);
+                if($sent->fetch()){
+                    $error[] = 'Ya existe un cliente con ese DNI';
+                }
             }
 };
 

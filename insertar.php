@@ -45,17 +45,17 @@
     ?>
     <form action="" method="post">
         <label for="dni">DNI:*</label>
-        <input type="text"    id="dni"          name="dni"><br>
+        <input type="text"    id="dni"          name="dni"  value="<?= $dni ?> " ><br>
         <label for="nombre">NOMBRE:*</label>
-        <input type="text"    id="nombre"       name="nombre"><br>
+        <input type="text"    id="nombre"       name="nombre"  value="<?= $nombre ?> " ><br>
         <label for="apellidos">APELLIDOS:</label>
-        <input type="text"    id="apellidos"    name="apellidos"><br>
+        <input type="text"    id="apellidos"    name="apellidos" value="<?= $apellidos ?> " ><br>
         <label for="dirección">DIRECCIÓN:</label>
-        <input type="text"    id="direccion"    name="direccion"><br>
+        <input type="text"    id="direccion"    name="direccion" value="<?= $direccion?> " ><br>
         <label for="codpostal">CÓDIGO POSTAL:*</label>
-        <input type="text"    id="codpostal"    name="codpostal"><br>
+        <input type="text"    id="codpostal"    name="codpostal" value="<?= $codpostal ?> " ><br>
         <label for="telefono">TELÉFONO:</label>
-        <input type="text"    id="telefono"    name="telefono"><br>
+        <input type="text"    id="telefono"    name="telefono"  value="<?= $telefono ?> " ><br>
         <button type="submit">Insertar</button>
     </form>
 
