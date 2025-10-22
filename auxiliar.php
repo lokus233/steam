@@ -13,13 +13,13 @@ function volver(){
     header('Location: index.php');
 }
 
-function validar_dni($dni, &$error){
+function validar_dni($dni, &$error, ?PDO $pdo = null){
     if($dni === '') {
             $error[] = 'El DNI es obligatorio';    
         }elseif(mb_strlen($dni) > 9){
                 $error[] = 'El DNI es demasiado largo';
         }else{
-                $pdo = conectar();
+                $pdo = $pdo ?? conectar();
                 $sent = $pdo->prepare('SELECT * FROM clientes WHERE dni = :dni');
                 $sent->execute([':dni' => $dni]);
                 if($sent->fetch()){
@@ -34,7 +34,7 @@ function validar_nombre($nombre, &$error){
         }elseif(mb_strlen($nombre) > 255){
                 $error[] = 'El nombre es demasiado largo';
         }else{
-                //Comprobar qeu es único
+                //Comprobar que es único
             }
 };
 
