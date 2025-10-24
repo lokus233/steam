@@ -4,7 +4,14 @@ DROP TABLE IF EXISTS clientes CASCADE;
 
 DROP TABLE IF EXISTS juegos CASCADE;
 DROP TABLE IF EXISTS desarrolladoras CASCADE;
+DROP TABLE IF EXISTS usuarios CASCADE;
 --Tabla de clientes de la tienda online
+CREATE TABLE usuarios (
+    id          BIGSERIAL       PRIMARY KEY,
+    nick     VARCHAR(255)    NOT NULL UNIQUE,
+    password    VARCHAR(255)    NOT NULL
+);
+
 CREATE TABLE clientes (
     id         BIGSERIAL       PRIMARY KEY,
     dni         VARCHAR(9)      NOT NULL UNIQUE,
@@ -14,6 +21,8 @@ CREATE TABLE clientes (
     codpostal   NUMERIC(5)      CHECK(codpostal >= 0),
     telefono    VARCHAR(255)
 );
+
+
 --Tabla de desarrolladores
 CREATE TABLE desarrolladoras(
     id BIGSERIAL PRIMARY KEY,
@@ -31,6 +40,9 @@ CREATE TABLE juegos (
 );
 
 --DATOS DE PRUEBA
+
+INSERT INTO usuarios(nick, password)
+VALUES('usuario', crypt('usuario', gen_salt('bf', 10)));
 
 INSERT INTO clientes(dni, nombre, apellidos, direccion, codpostal, telefono)
 VALUES('11111111A', 'Pepe', 'Florencio', 'C/ micasa', 11540, '639870912'),

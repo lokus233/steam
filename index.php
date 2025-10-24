@@ -1,3 +1,4 @@
+<?php session_start() ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +9,13 @@
 <body>
     <?php
     require 'auxiliar.php';
+    if(!comprobar_login()){
+        return;
+    }
     $pdo = conectar();
     $sent = $pdo->query('SELECT * FROM clientes');
     ?>
-
+    <?php cabecera() ?>
     <table border="1">
         <thead>
             <th>DNI</th>
@@ -21,21 +25,25 @@
             <th>Código Postal</th>
             <th>Teléfono</th>
             <th>Acciones</th>
+            <th colspan="2"> Modificar </th>
         </thead>
         <tbody>
             <?php foreach ($sent as $fila): ?>
             <tr>
-                <td><?= $fila['dni'] ?></td>
-                <td><?= $fila['nombre'] ?></td>
-                <td><?= $fila['apellidos'] ?></td>
-                <td><?= $fila['direccion'] ?></td>
-                <td><?= $fila['codpostal'] ?></td>
-                <td><?= $fila['telefono'] ?></td>
+                <td><?= hh($fila['dni']) ?></td>
+                <td><?= hh($fila['nombre']) ?></td>
+                <td><?= hh($fila['apellidos']) ?></td>
+                <td><?= hh($fila['direccion']) ?></td>
+                <td><?= hh($fila['codpostal']) ?></td>
+                <td><?= hh($fila['telefono']) ?></td>
                 <td>
                     <form action="borrar.php" method="post" >
-                        <input type="hidden" name="id" value="<?=$fila['id']?>">
+                        <input type="hidden" name="id" value="<?=hh($fila['id'])?>">
                         <button type="submit"> "borrar" </button>
             </form>
+                </td>
+                <td>
+                    <a href="modificar.php?id=<?=hh($fila['id'])?>">modificar</a>
                 </td>
             </tr>
             <?php endforeach ?>
@@ -53,9 +61,9 @@
         <tbody>
             <?php foreach ($sent as $fila): ?>
             <tr>
-                <td><?= $fila['titulo'] ?></td>
-                <td><?= $fila['genero'] ?></td>
-                <td><?= $fila['precio'] ?></td>
+                <td><?= hh($fila['titulo']) ?></td>
+                <td><?= hh($fila['genero']) ?></td>
+                <td><?= hh($fila['precio']) ?></td>
             </tr>
             <?php endforeach ?>
         </tbody>

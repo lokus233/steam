@@ -1,6 +1,13 @@
 <?php
 
 require 'auxiliar.php';
+if (!comprobar_login()){
+    return;
+   }
+
+if($_SESSION['nick'] != 'admin'){
+    return volver();
+}
 
 // $id = trim($_POST['id']);
 $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);

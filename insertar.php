@@ -9,6 +9,7 @@
     <?php
 
    require 'auxiliar.php';
+   
 
     $dni       = obtener_post('dni');
     $nombre    = obtener_post('nombre');
@@ -46,17 +47,17 @@
     ?>
     <form action="" method="post">
         <label for="dni">DNI:*</label>
-        <input type="text"    id="dni"          name="dni"  value="<?= $dni ?> " ><br>
+        <input type="text"    id="dni"          name="dni"  value="<?= hh($dni) ?> " ><br>
         <label for="nombre">NOMBRE:*</label>
-        <input type="text"    id="nombre"       name="nombre"  value="<?= $nombre ?> " ><br>
+        <input type="text"    id="nombre"       name="nombre"  value="<?= hh($nombre) ?> " ><br>
         <label for="apellidos">APELLIDOS:</label>
-        <input type="text"    id="apellidos"    name="apellidos" value="<?= $apellidos ?> " ><br>
+        <input type="text"    id="apellidos"    name="apellidos" value="<?= hh($apellidos) ?> " ><br>
         <label for="dirección">DIRECCIÓN:</label>
-        <input type="text"    id="direccion"    name="direccion" value="<?= $direccion?> " ><br>
+        <input type="text"    id="direccion"    name="direccion" value="<?= hh($direccion) ?> " ><br>
         <label for="codpostal">CÓDIGO POSTAL:*</label>
-        <input type="text"    id="codpostal"    name="codpostal" value="<?= $codpostal ?> " ><br>
+        <input type="text"    id="codpostal"    name="codpostal" value="<?= hh($codpostal) ?> " ><br>
         <label for="telefono">TELÉFONO:</label>
-        <input type="text"    id="telefono"    name="telefono"  value="<?= $telefono ?> " ><br>
+        <input type="text"    id="telefono"    name="telefono"  value="<?= hh($telefono) ?> " ><br>
         <button type="submit">Insertar</button>
     </form>
 

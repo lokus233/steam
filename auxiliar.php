@@ -13,16 +13,18 @@ function volver(){
     header('Location: index.php');
 }
 
+function obtener_get(string $par): ?string
+{
+    return isset($_GET[$par]) ? trim($_GET[$par]): null;
+}
+
 function validar_dni($dni, &$error, ?PDO $pdo = null){
     if($dni === '') {
             $error[] = 'El DNI es obligatorio';    
         }elseif(mb_strlen($dni) > 9){
                 $error[] = 'El DNI es demasiado largo';
         }else{
-                $pdo = $pdo ?? conectar();
-                $sent = $pdo->prepare('SELECT * FROM clientes WHERE dni = :dni');
-                $sent->execute([':dni' => $dni]);
-                if($sent->fetch()){
+            if (buscar_cliente_por_dni($dni, $pdo)){
                     $error[] = 'Ya existe un cliente con ese DNI';
                 }
             }
@@ -78,3 +80,69 @@ function validar_sanear_telefono($telefono, &$error){
         $error[] = 'El telegono es demasiado largo';
     }
 };
+
+function mostrar_errores(array $error): void
+{
+    foreach($error as $mensaje) {?>
+    <h3>Error: <?=$mensaje ?></h3><?php
+    }
+}
+
+function buscar_cliente($id, ?PDO $pdo = null): array|false
+{
+    $pdo = $pdo ?? conectar();
+    $sent = $pdo->prepare('SELECT * FROM clientes WHERE id = :id');
+    $sent->execute([':id' => $id]);
+    return $sent->fetch();
+}
+
+function buscar_cliente_por_dni($dni, ?PDO $pod = null): array|false
+{
+    $pdo = $pdo ?? conectar();
+    $sent = $pdo->prepare('SELECT * FROM clientes WHERE dni = :dni');
+    $sent->execute([':dni' => $dni]);
+    return $sent->fetch();
+}
+
+function validar_dni_update($dni,$id,$error, ?PDO $pod = null)
+{
+    if($dni === '') {
+            $error[] = 'El DNI es obligatorio';    
+        }elseif(mb_strlen($dni) > 9){
+                $error[] = 'El DNI es demasiado largo';
+        }else{
+            $pdo = $pdo ?? conectar();
+            $sent = $pdo->prepare('SELECT *
+                                      FROM clientes
+                                        WHERE dni = :dni AND id != :id');
+            $sent->execute([':dni' => $dni, ':id' => $id]);        
+            if ($sent->fetch()){
+                    $error[] = 'Ya existe un cliente con ese DNI';
+                }
+            }
+}
+
+function cabecera()
+{
+    ?>
+    <div align="right">
+        <?= hh($_SESSION['nick']) ?>
+        <a href="logout.php">Logout</a>
+    </div>
+    <hr><?php
+}
+
+function comprobar_login()
+{
+    if(!isset($_SESSION['nick'])){
+        header('Location: login.php');
+        return false;
+    }
+    return true;
+}
+
+function hh($cadena)
+{
+    return htmlspecialchars($cadena ?? '');
+
+}
