@@ -31,6 +31,8 @@
         return volver();
     }
         $pdo = conectar();
+        $pdo->beginTransaction();
+        $pdo->exec('LOCK TABLE clientes IN SHARE MODE;');
         $error = [];
         validar_dni($dni ,$error, $pdo );
         validar_nombre($nombre, $error);
@@ -50,8 +52,10 @@
             ':codpostal' => $codpostal,
             ':telefono' => $telefono,
         ]);
+        $pdo->commit();
         return volver();
         }else {
+            $pdo->rollBack();
             cabecera();
             mostrar_errores($error);
         }
