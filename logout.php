@@ -3,12 +3,13 @@ session_start();
 $_SESSION = [];
 $params = session_get_cookie_params();
 setcookie(
-session_name(), 
+    session_name(), 
     '', 
     1,
     $params['path'],
     $params['domain'],
     $params['secure'],
-    $params['httponly'] );
+    $params['httponly'] 
+);
 session_destroy();
 header('Location: login.php');

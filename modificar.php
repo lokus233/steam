@@ -1,4 +1,4 @@
-<php session_start() ?>
+<?php session_start() ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +9,9 @@
 <body>
     <?php
    require 'auxiliar.php';
-
+    if(!comprobar_login()){
+        return;
+    }
    
 
    $id = obtener_get('id');
@@ -27,6 +29,7 @@
    
 
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $_csfr     = obtener_post('_csfr');
     $dni       = obtener_post('dni');
     $nombre    = obtener_post('nombre');
     $apellidos = obtener_post('apellidos');
@@ -34,22 +37,25 @@
     $codpostal = obtener_post('codpostal');
     $telefono  = obtener_post('telefono');
 
-        if(isset($dni, $nombre, $apellidos, $direccion, $codpostal, $telefono)){
+        if(isset($dni,$_csfr, $nombre, $apellidos, $direccion, $codpostal, $telefono)){
         // Validación
+        if(!comprobar_csrf($_csfr)){
+            return volver();
+        }
             $error = [];
             validar_dni_update($dni, $id, $error, $pdo );
             validar_nombre($nombre, $error);
             validar_sanear_apellidos($apellidos, $error);
             validar_sanear_direccion($direccion, $error);
             validar_sanear_codpostal($codpostal, $error);
-            validar_sanear_telefono($telefono,$eror);
+            validar_sanear_telefono($telefono,$error);
 
             if(empty($error)){
             $sent = $pdo->prepare('UPDATE clientes
                                     SET dni = :dni,
                                         nombre = :nombre,
                                         apellidos = :apellidos,
-                                        direccion = :direccion
+                                        direccion = :direccion,
                                         codpostal = :codpostal,
                                         telefono = :telefono
                                     WHERE id = :id');
@@ -73,6 +79,7 @@
     ?>
     <?php cabecera() ?>
    <form action="" method="post">
+        <?php campo_csrf() ?>
         <label for="dni">DNI:*</label>
         <input type="text"    id="dni"          name="dni"  value="<?= hh($dni) ?> " ><br>
         <label for="nombre">NOMBRE:*</label>

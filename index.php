@@ -38,6 +38,7 @@
                 <td><?= hh($fila['telefono']) ?></td>
                 <td>
                     <form action="borrar.php" method="post" >
+                        <?php campo_csrf() ?>
                         <input type="hidden" name="id" value="<?=hh($fila['id'])?>">
                         <button type="submit"> "borrar" </button>
             </form>

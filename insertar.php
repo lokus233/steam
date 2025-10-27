@@ -1,3 +1,4 @@
+<?php session_start() ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,8 +10,14 @@
     <?php
 
    require 'auxiliar.php';
-   
 
+   if(!comprobar_login()){
+        return;
+   }
+
+   token_csrf();
+   
+    $_csfr     = obtener_post('_csfr');
     $dni       = obtener_post('dni');
     $nombre    = obtener_post('nombre');
     $apellidos = obtener_post('apellidos');
@@ -18,8 +25,11 @@
     $codpostal = obtener_post('codpostal');
     $telefono  = obtener_post('telefono');
 
-    if(isset($dni, $nombre, $apellidos, $direccion, $codpostal, $telefono)){
+    if(isset($dni,$_csfr, $nombre, $apellidos, $direccion, $codpostal, $telefono)){
         // Validación
+         if (!comprobar_csrf($_csfr)){
+        return volver();
+    }
         $pdo = conectar();
         $error = [];
         validar_dni($dni ,$error, $pdo );
@@ -27,11 +37,9 @@
         validar_sanear_apellidos($apellidos, $error);
         validar_sanear_direccion($direccion, $error);
         validar_sanear_codpostal($codpostal, $error);
-        validar_sanear_telefono($telefono,$eror);
+        validar_sanear_telefono($telefono,$error);
 
         if(empty($error)){
-        
-        
         $sent = $pdo->prepare('INSERT INTO clientes (dni, nombre, apellidos, direccion, codpostal, telefono)
                                VALUES (:dni, :nombre, :apellidos, :direccion, :codpostal, :telefono)');
         $sent->execute([
@@ -43,9 +51,16 @@
             ':telefono' => $telefono,
         ]);
         return volver();
-        }}
+        }else {
+            cabecera();
+            mostrar_errores($error);
+        }
+    }else{
+        cabecera();
+    }
     ?>
     <form action="" method="post">
+        <?php campo_csrf() ?>
         <label for="dni">DNI:*</label>
         <input type="text"    id="dni"          name="dni"  value="<?= hh($dni) ?> " ><br>
         <label for="nombre">NOMBRE:*</label>
@@ -59,6 +74,7 @@
         <label for="telefono">TELÉFONO:</label>
         <input type="text"    id="telefono"    name="telefono"  value="<?= hh($telefono) ?> " ><br>
         <button type="submit">Insertar</button>
+        <a href="index.php">Volver</a>
     </form>
 
 </body>

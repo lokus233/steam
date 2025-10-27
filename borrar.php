@@ -1,3 +1,4 @@
+<?php session_start() ?>
 <?php
 
 require 'auxiliar.php';
@@ -10,9 +11,13 @@ if($_SESSION['nick'] != 'admin'){
 }
 
 // $id = trim($_POST['id']);
+$_csrf = obtener_post('_csrf');
 $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
 
-if($id){
+if(isset($id, $_csfr)){
+    if(!comprobar_csrf($_csfr)){
+        return volver();
+    }
     $pdo = conectar();
     $sent = $pdo->prepare("DELETE FROM clientes WHERE id = :id"); /* el :id es un marcador */
     $sent->execute([':id' => $id]);
