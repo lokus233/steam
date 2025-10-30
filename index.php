@@ -8,12 +8,17 @@
 </head>
 <body>
     <?php
-    require 'auxiliar.php';
+    require_once 'auxiliar.php';
+    require_once 'Cliente.php';
+    
     if(!comprobar_login()){
         return;
     }
-    $pdo = conectar();
-    $sent = $pdo->query('SELECT * FROM clientes');
+
+
+
+
+    
     ?>
     <?php cabecera() ?>
     <table border="1">
@@ -28,48 +33,29 @@
             <th colspan="2"> Modificar </th>
         </thead>
         <tbody>
-            <?php foreach ($sent as $fila): ?>
+            <?php foreach (Cliente::todos() as $cliente): ?>
             <tr>
-                <td><?= hh($fila['dni']) ?></td>
-                <td><?= hh($fila['nombre']) ?></td>
-                <td><?= hh($fila['apellidos']) ?></td>
-                <td><?= hh($fila['direccion']) ?></td>
-                <td><?= hh($fila['codpostal']) ?></td>
-                <td><?= hh($fila['telefono']) ?></td>
+                <td><?= hh($cliente->dni) ?></td>
+                <td><?= hh($cliente->nombre) ?></td>
+                <td><?= hh($cliente->apellidos) ?></td>
+                <td><?= hh($cliente->direccion) ?></td>
+                <td><?= hh($cliente->codpostal) ?></td>
+                <td><?= hh($cliente->telefono) ?></td>
                 <td>
                     <form action="borrar.php" method="post" >
                         <?php campo_csrf() ?>
-                        <input type="hidden" name="id" value="<?=hh($fila['id'])?>">
+                        <input type="hidden" name="id" value="<?=hh($cliente->id)?>">
                         <button type="submit"> "borrar" </button>
             </form>
                 </td>
                 <td>
-                    <a href="modificar.php?id=<?=hh($fila['id'])?>">modificar</a>
+                    <a href="modificar.php?id=<?=hh($cliente->id)?>">modificar</a>
                 </td>
             </tr>
             <?php endforeach ?>
         </tbody>
     </table>
-    <?php
-    $sent = $pdo->query('SELECT * FROM juegos');
-    ?>
-    <table border="1">
-        <thead>
-            <th>titulos</th>
-            <th>genero</th>
-            <th>precio</th>
-        </thead>
-        <tbody>
-            <?php foreach ($sent as $fila): ?>
-            <tr>
-                <td><?= hh($fila['titulo']) ?></td>
-                <td><?= hh($fila['genero']) ?></td>
-                <td><?= hh($fila['precio']) ?></td>
-            </tr>
-            <?php endforeach ?>
-        </tbody>
-    </table>
-    <br>
+    
     <a href="insertar.php"> Insertar un nuevo cliente </a>
 </body>
 </html>

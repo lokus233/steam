@@ -129,7 +129,17 @@ function cabecera()
         <?= hh($_SESSION['nick']) ?>
         <a href="logout.php">Logout</a>
     </div>
-    <hr><?php
+    <hr>
+    <?php if (isset($_SESSION['exito'])): ?>
+        <h3><?=$_SESSION['exito'] ?></h3>
+        <?php unset($_SESSION['exito']) ?>
+        <?php endif ?>
+
+    <?php if (isset($_SESSION['fallo'])): ?>
+        <h3><?=$_SESSION['fallo'] ?></h3>
+        <?php unset($_SESSION['fallo']) ?>
+        <?php endif ?>
+    <?php
 }
 
 function comprobar_login()

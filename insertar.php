@@ -9,7 +9,7 @@
 <body>
     <?php
 
-   require 'auxiliar.php';
+   require_once 'auxiliar.php';
 
    if(!comprobar_login()){
         return;
@@ -53,9 +53,11 @@
             ':telefono' => $telefono,
         ]);
         $pdo->commit();
+        $_SESSION['exito'] = 'EL cliente se ha insertado correctamente';
         return volver();
         }else {
             $pdo->rollBack();
+            $_SESSION['fallo']  = 'Ocurrió un error al insertar un nuevo cliente';
             cabecera();
             mostrar_errores($error);
         }

@@ -1,12 +1,13 @@
 <?php session_start() ?>
 <?php
 
-require 'auxiliar.php';
+require_once 'auxiliar.php';
 if (!comprobar_login()){
     return;
    }
 
 if($_SESSION['nick'] != 'admin'){
+    $_SESSION['fallo'] = 'No tiene permiso para borrar un cliente';
     return volver();
 }
 
@@ -21,6 +22,7 @@ if(isset($id, $_csfr)){
     $pdo = conectar();
     $sent = $pdo->prepare("DELETE FROM clientes WHERE id = :id"); /* el :id es un marcador */
     $sent->execute([':id' => $id]);
+    $_SESSION['exito'] = 'El cliente se ha borrado correctamente';
 }
 
 header('Location: index.php');

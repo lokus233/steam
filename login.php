@@ -8,7 +8,7 @@
 </head>
 <body>
     <?php
-    require 'auxiliar.php';
+    require_once 'auxiliar.php';
 
     $_csrf = obtener_post('_csrf');
     $nick = obtener_post('nick');
@@ -24,6 +24,7 @@
         $fila = $sent->fetch();
         if($fila && password_verify($password, $fila['password'])){
             $_SESSION['nick'] = $nick;
+            $_SESSION['exito'] = 'Sesión inicada correctamente.';
             return volver();
         }else{
             echo "<h2>Error de credenciales incorrectas</h2>";
@@ -33,11 +34,11 @@
 
     ?>
     <form action="" method="post">
-        <? campo_csrf() ?>
+        <?php campo_csrf() ?>
         <label for="nick">Nombre de usuario</label>
         <input type="text" id="nick" name="nick"><br>
 
-        <label for="password">Conrtaseña</label>
+        <label for="password">Contraseña</label>
         <input type="password" id="password" name="password"><br>
 
         <button type="submit">Inciar sesión</button>

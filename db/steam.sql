@@ -42,7 +42,8 @@ CREATE TABLE juegos (
 --DATOS DE PRUEBA
 
 INSERT INTO usuarios(nick, password)
-VALUES('usuario', crypt('usuario', gen_salt('bf', 10)));
+VALUES('usuario', crypt('usuario', gen_salt('bf', 10))),
+      ('admin', crypt('admin', gen_salt('bf', 10)));
 
 INSERT INTO clientes(dni, nombre, apellidos, direccion, codpostal, telefono)
 VALUES('11111111A', 'Pepe', 'Florencio', 'C/ micasa', 11540, '639870912'),

@@ -8,7 +8,7 @@
 </head>
 <body>
     <?php
-   require 'auxiliar.php';
+   require_once 'auxiliar.php';
     if(!comprobar_login()){
         return;
     }
@@ -24,6 +24,7 @@
    $fila = buscar_cliente($id, $pdo);
 
    if(!$fila){
+        $_SESSION['fallo'] = 'El cliente a modificar no existe';
         return volver();
    }
    
@@ -68,8 +69,10 @@
                     ':codpostal' => $codpostal,
                     ':telefono' => $telefono,
                 ]);
+            $_SESSION['exito'] = 'EL cliente se ha modificado correctamente';
             return volver();
             } else{
+                $_SESSION['falllo'] = 'No se ha podido modificar el cliente';
                 mostrar_errores($error);
             }
         } 
