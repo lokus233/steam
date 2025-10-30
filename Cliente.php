@@ -17,8 +17,13 @@ class Cliente
         $pdo = Cliente::pdo();
         $sent = $pdo->prepare('SELECT * FROM clientes WHERE id = :id');
         $sent->execute([':id' => $id]);
-        return $sent->fetchObject(Cliente::class);
+        return $sent->fetchObject(Cliente::class) ?: null;
 
+    }
+
+    public static function borrar_por_id(String|int $id): void
+    {
+        Cliente::buscar_por_id($id)?->borrar();
     }
 
     /**
@@ -29,7 +34,7 @@ class Cliente
 
 
 
-
+    
     public static function todos(): array
     {
         $pdo = Cliente::pdo();
@@ -38,6 +43,13 @@ class Cliente
         
     }
 
+
+    public function borrar(): void
+    {
+        $pdo = Cliente::pdo();
+        $sent = $pdo->prepare("DELETE FROM clientes WHERE id = :id"); /* el :id es un marcador */
+        $sent->execute([':id' => $this->id]);
+    }
 
     private static function pdo(): PDO
     {    

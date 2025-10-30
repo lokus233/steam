@@ -15,10 +15,6 @@
         return;
     }
 
-
-
-
-    
     ?>
     <?php cabecera() ?>
     <table border="1">

@@ -9,7 +9,7 @@
 <body>
     <?php
 
-   require_once 'auxiliar.php';
+   require 'auxiliar.php';
 
    if(!comprobar_login()){
         return;
