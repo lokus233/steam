@@ -1,9 +1,12 @@
 <?php
-require_once 'auxiliar.php';
 
-class Cliente
+namespace AR;
+
+require_once 'auxiliar.php';
+require_once 'ActiveRecord.php';
+
+class Cliente extends ActiveRecord
 {
-    public $id;
     public $dni;
     public $nombre;
     public $apellidos;
@@ -11,49 +14,66 @@ class Cliente
     public $codpostal;
     public $telefono;
 
-    public static PDO $pdo;
-    public static function buscar_por_id($id): ?Cliente
+    #[\Override]
+    protected static string $tabla = 'clientes';
+
+    public static function buscar_por_dni(string $dni): ?Cliente
     {
         $pdo = Cliente::pdo();
-        $sent = $pdo->prepare('SELECT * FROM clientes WHERE id = :id');
-        $sent->execute([':id' => $id]);
+        $tabla = Cliente::$tabla;
+        $sent = $pdo->prepare("SELECT * FROM $tabla WHERE dni = :dni");
+        $sent->execute([':dni' => $dni]);
         return $sent->fetchObject(Cliente::class) ?: null;
-
     }
 
-    public static function borrar_por_id(String|int $id): void
+    #[\Override]
+    public function guardar(): void
     {
-        Cliente::buscar_por_id($id)?->borrar();
+        if (isset($this->id)) {
+            $this->modificar();
+        } else {
+            $this->insertar();
+        }
     }
 
-    /**
-     * Devuelve todos los clientes.
-     * 
-     *  @return Cliente[]
-     */
-
-
-
-    
-    public static function todos(): array
+    private function modificar()
     {
         $pdo = Cliente::pdo();
-        $sent = $pdo->query('SELECT * FROM clientes');
-        return $sent->fetchALL(PDO::FETCH_CLASS, Cliente::class);
-        
+        $tabla = Cliente::$tabla;
+        $sent = $pdo->prepare("UPDATE $tabla
+                                  SET dni = :dni,
+                                      nombre = :nombre,
+                                      apellidos = :apellidos,
+                                      direccion = :direccion,
+                                      codpostal = :codpostal,
+                                      telefono = :telefono
+                                WHERE id = :id");
+        $sent->execute([
+            ':id'        => $this->id,
+            ':dni'       => $this->dni,
+            ':nombre'    => $this->nombre,
+            ':apellidos' => $this->apellidos,
+            ':direccion' => $this->direccion,
+            ':codpostal' => $this->codpostal,
+            ':telefono'  => $this->telefono,
+        ]);
     }
 
-
-    public function borrar(): void
+    private function insertar()
     {
         $pdo = Cliente::pdo();
-        $sent = $pdo->prepare("DELETE FROM clientes WHERE id = :id"); /* el :id es un marcador */
-        $sent->execute([':id' => $this->id]);
-    }
-
-    private static function pdo(): PDO
-    {    
-    Cliente::$pdo = Cliente::$pdo ?? conectar();
-        return Cliente::$pdo;
+        $tabla = Cliente::$tabla;
+        $sent = $pdo->prepare("INSERT INTO $tabla (dni, nombre, apellidos, direccion, codpostal, telefono)
+                               VALUES (:dni, :nombre, :apellidos, :direccion, :codpostal, :telefono)
+                               RETURNING (id)");
+        $sent->execute([
+            ':dni'       => $this->dni,
+            ':nombre'    => $this->nombre,
+            ':apellidos' => $this->apellidos,
+            ':direccion' => $this->direccion,
+            ':codpostal' => $this->codpostal,
+            ':telefono'  => $this->telefono,
+        ]);
+        $this->id = $sent->fetchColumn() ?: null;
     }
 }
