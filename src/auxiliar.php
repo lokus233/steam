@@ -1,10 +1,7 @@
 <?php
-
-require_once 'Cliente.php';
-
 function conectar()
 {
-    return new PDO('pgsql:host=localhost;dbname=steam', 'steam', 'steam');
+    return new PDO('pgsql:host=localhost;dbname=steam', 'steam', '1234');
 }
 
 function obtener_get(string $par): ?string
