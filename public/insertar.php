@@ -1,4 +1,8 @@
-<?php session_start() ?>
+<?php
+
+use App\AR\Cliente;
+
+ session_start() ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,8 +12,7 @@
 </head>
 <body>
     <?php
-    require_once 'auxiliar.php';
-    require_once 'Cliente.php';
+     require_once '../vendor/autoload.php';
 
     if (!esta_logueado()) {
         return;

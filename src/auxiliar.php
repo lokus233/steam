@@ -1,4 +1,9 @@
 <?php
+
+use App\AR\Cliente;
+
+require '../vendor/autoload.php';
+
 function conectar()
 {
     return new PDO('pgsql:host=localhost;dbname=steam', 'steam', '1234');
